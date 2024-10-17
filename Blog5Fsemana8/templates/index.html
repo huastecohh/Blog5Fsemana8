@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Contenedor para agregar un nuevo blog -->
+    <div id="new-blog-container">
+        <h2>Agregar nuevo blog</h2>
+        <form action="{{ url_for('new_blog') }}" method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Título del blog" required><br>
+            <textarea name="content" placeholder="Contenido del blog" required></textarea><br>
+            <input type="text" name="author" placeholder="Autor" required><br>
+            <input type="file" name="image" accept="image/*"><br>
+            <button type="submit">Publicar</button>
+        </form>
+    </div>
+
+    <!-- Contenedor para mostrar blogs ya existentes -->
+    <div id="blogs-container">
+        <h2>Blogs Publicados</h2>
+        {% for post in posts %}
+        <div class="blog-post">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+            <p><strong>Autor:</strong> {{ post.author }}</p>
+            <img src="{{ post.image_url }}" alt="Imagen del blog" style="max-width: 200px;"><br>
+            <small>Publicado en: {{ post.created_at }}</small><br>
+
+            <!-- Botón para compartir en WhatsApp -->
+            <a href="https://api.whatsapp.com/send?text={{ url_for('index', _external=True) }}#{{ post.title }}" target="_blank">
+                Compartir en WhatsApp
+            </a>
+
+            <!-- Botón para compartir en Facebook -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url_for('index', _external=True) }}#{{ post.title }}" target="_blank">
+                Compartir en Facebook
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
